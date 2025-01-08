@@ -38,161 +38,33 @@
         /* Content Section */
         .mandala-container {
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
+            align-items: center;
             margin: 40px auto;
             max-width: 900px;
         }
 
-        .mandala {
-            width: 100%;
-            max-width: 800px;
-            height: 500px;
-            margin: 20px 0;
-            position: relative;
-            background-size: cover;
-            background-position: center;
-            box-shadow: 0px 4px 15px rgba(0, 255, 247, 0.2);
-        }
-
-        /* Embed iframe */
-        .mandala iframe {
-            width: 100%;
-            height: 100%;
-            border: none;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 10px;
-            background: #111;
-            border-top: 2px solid #444;
-            color: #aaa;
-            font-size: 0.9rem;
-        }
-    </style>
-</head>
-<body>
-
-<header>
-    <h1>Mandala Graphs Showcase</h1>
-    <p>Explore different industries through interactive mandalas.</p>
-</header>
-
-<main class="mandala-container">
-    <h2>Library Mandala</h2>
-    <div 
-        class="mandala" 
-        style="background-image: url('https://miro.medium.com/v2/resize:fit:1200/1*6Jp3vJWe7VFlFHZ9WhSJng.jpeg');">
-        <iframe src="https://tadhgkelleher.github.io/library/" title="Library Mandala"></iframe>
-    </div>
-
-    <h2>Justin's Mandala</h2>
-    <div 
-        class="mandala" 
-        style="background-image: url('https://www.mdltone.audio/wp-content/themes/mdltone/img/mdl-tone-ultimate-heavy-drum-kit-blend.jpg');">
-        <iframe src="https://tadhgkelleher.github.io/Justin-Mandala/" title="Justin's Mandala"></iframe>
-    </div>
-
-    <h2>Sports Mandala</h2>
-    <div 
-        class="mandala" 
-        style="background-image: url('https://img.rasset.ie/0021a8cf-600.jpg');">
-        <iframe src="https://tadhgkelleher.github.io/sportsmandala/" title="Sports Mandala"></iframe>
-    </div>
-
-    <h2>Fairtrade Mandala</h2>
-    <div 
-        class="mandala" 
-        style="background-image: url('https://www.spectrumhealth.ie/wp-content/uploads/2017/11/steamingcupofcoffeewithspiltcoffeebeans.jpg');">
-        <iframe src="https://tadhgkelleher.github.io/fairtrade/" title="Fairtrade Mandala"></iframe>
-    </div>
-
-    <h2>Medical Mandala</h2>
-    <div 
-        class="mandala" 
-        style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZbRGgX2pvCjSFmZ0f5meS2yZSyZDE79KS2w&s');">
-        <iframe src="https://tadhgkelleher.github.io/mandala/" title="Medical Mandala"></iframe>
-    </div>
-</main>
-
-<footer>
-    &copy; 2025 Mandala Graphs Showcase. All rights reserved.
-</footer>
-
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mandala Graphs Showcase</title>
-    <style>
-        /* General Reset */
-        body, html {
-            margin: 0;
-            padding: 0;
-            font-family: 'Arial', sans-serif;
-            background: #1a1a1a;
-            color: #f1f1f1;
-        }
-        
-        /* Header */
-        header {
-            text-align: center;
-            padding: 20px;
-            background: #111;
-            border-bottom: 2px solid #444;
-        }
-
-        header h1 {
-            font-size: 2.5rem;
-            margin: 0;
-            letter-spacing: 2px;
-            color: #00fff7;
-        }
-
-        header p {
-            font-size: 1rem;
-            margin-top: 10px;
-            color: #aaa;
-        }
-
-        /* Content Section */
-        .mandala-container {
+        .mandala-wrapper {
             display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-direction: column;
-            margin: 40px auto;
-            max-width: 900px;
-        }
-
-        .mandala {
+            justify-content: space-between;
+            margin: 20px 0;
             width: 100%;
             max-width: 800px;
+        }
+
+        .mandala-image {
+            width: 45%;
             height: 500px;
-            margin: 20px 0;
-            position: relative;
             background-size: cover;
             background-position: center;
             box-shadow: 0px 4px 15px rgba(0, 255, 247, 0.2);
         }
 
-        /* Embed iframe */
-        .mandala iframe {
-            width: 100%;
-            height: 100%;
+        .mandala-iframe {
+            width: 45%;
+            height: 500px;
             border: none;
-            position: absolute;
-            top: 0;
-            left: 0;
+            box-shadow: 0px 4px 15px rgba(0, 255, 247, 0.2);
         }
 
         /* Footer */
@@ -215,38 +87,48 @@
 
 <main class="mandala-container">
     <h2>Library Mandala</h2>
-    <div 
-        class="mandala" 
-        style="background-image: url('https://miro.medium.com/v2/resize:fit:1200/1*6Jp3vJWe7VFlFHZ9WhSJng.jpeg');">
-        <iframe src="https://tadhgkelleher.github.io/library/" title="Library Mandala"></iframe>
+    <div class="mandala-wrapper">
+        <div 
+            class="mandala-image" 
+            style="background-image: url('https://miro.medium.com/v2/resize:fit:1200/1*6Jp3vJWe7VFlFHZ9WhSJng.jpeg');">
+        </div>
+        <iframe class="mandala-iframe" src="https://tadhgkelleher.github.io/library/" title="Library Mandala"></iframe>
     </div>
 
     <h2>Justin's Mandala</h2>
-    <div 
-        class="mandala" 
-        style="background-image: url('https://www.mdltone.audio/wp-content/themes/mdltone/img/mdl-tone-ultimate-heavy-drum-kit-blend.jpg');">
-        <iframe src="https://tadhgkelleher.github.io/Justin-Mandala/" title="Justin's Mandala"></iframe>
+    <div class="mandala-wrapper">
+        <div 
+            class="mandala-image" 
+            style="background-image: url('https://www.mdltone.audio/wp-content/themes/mdltone/img/mdl-tone-ultimate-heavy-drum-kit-blend.jpg');">
+        </div>
+        <iframe class="mandala-iframe" src="https://tadhgkelleher.github.io/Justin-Mandala/" title="Justin's Mandala"></iframe>
     </div>
 
     <h2>Sports Mandala</h2>
-    <div 
-        class="mandala" 
-        style="background-image: url('https://img.rasset.ie/0021a8cf-600.jpg');">
-        <iframe src="https://tadhgkelleher.github.io/sportsmandala/" title="Sports Mandala"></iframe>
+    <div class="mandala-wrapper">
+        <div 
+            class="mandala-image" 
+            style="background-image: url('https://img.rasset.ie/0021a8cf-600.jpg');">
+        </div>
+        <iframe class="mandala-iframe" src="https://tadhgkelleher.github.io/sportsmandala/" title="Sports Mandala"></iframe>
     </div>
 
     <h2>Fairtrade Mandala</h2>
-    <div 
-        class="mandala" 
-        style="background-image: url('https://www.spectrumhealth.ie/wp-content/uploads/2017/11/steamingcupofcoffeewithspiltcoffeebeans.jpg');">
-        <iframe src="https://tadhgkelleher.github.io/fairtrade/" title="Fairtrade Mandala"></iframe>
+    <div class="mandala-wrapper">
+        <div 
+            class="mandala-image" 
+            style="background-image: url('https://www.spectrumhealth.ie/wp-content/uploads/2017/11/steamingcupofcoffeewithspiltcoffeebeans.jpg');">
+        </div>
+        <iframe class="mandala-iframe" src="https://tadhgkelleher.github.io/fairtrade/" title="Fairtrade Mandala"></iframe>
     </div>
 
     <h2>Medical Mandala</h2>
-    <div 
-        class="mandala" 
-        style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZbRGgX2pvCjSFmZ0f5meS2yZSyZDE79KS2w&s');">
-        <iframe src="https://tadhgkelleher.github.io/mandala/" title="Medical Mandala"></iframe>
+    <div class="mandala-wrapper">
+        <div 
+            class="mandala-image" 
+            style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZbRGgX2pvCjSFmZ0f5meS2yZSyZDE79KS2w&s');">
+        </div>
+        <iframe class="mandala-iframe" src="https://tadhgkelleher.github.io/mandala/" title="Medical Mandala"></iframe>
     </div>
 </main>
 
