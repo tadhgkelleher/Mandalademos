@@ -50,6 +50,7 @@
             margin: 20px 0;
             width: 100%;
             max-width: 800px;
+            flex-wrap: wrap; /* Allow items to wrap on smaller screens */
         }
 
         .mandala-image {
@@ -75,6 +76,23 @@
             border-top: 2px solid #444;
             color: #aaa;
             font-size: 0.9rem;
+        }
+
+        /* Media Query for Mobile Devices */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .mandala-wrapper {
+                flex-direction: column;
+                align-items: center; /* Center the content */
+            }
+
+            .mandala-image, .mandala-iframe {
+                width: 100%;
+                height: auto; /* Allow the height to adjust according to the content */
+            }
         }
     </style>
 </head>
