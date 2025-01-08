@@ -35,37 +35,23 @@
             color: #aaa;
         }
 
-        /* Carousel Section */
-        .carousel-container {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            scrollbar-width: none; /* Firefox */
-            -ms-overflow-style: none; /* IE 10+ */
-        }
-
-        .carousel-container::-webkit-scrollbar {
-            display: none; /* Chrome, Safari */
-        }
-
-        .carousel-item {
-            flex: 0 0 100%;
-            scroll-snap-align: center;
+        /* Content Section */
+        .mandala-container {
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 600px;
-            background: #222;
-            border: 2px solid #444;
-            margin: 20px;
-            border-radius: 10px;
-            box-shadow: 0px 4px 15px rgba(0, 255, 247, 0.2);
+            flex-direction: column;
+            margin: 40px auto;
+            max-width: 900px;
         }
 
-        iframe {
+        .mandala-iframe {
             border: none;
-            width: 90%;
+            width: 100%;
+            max-width: 800px;
             height: 500px;
+            margin: 20px 0;
+            box-shadow: 0px 4px 15px rgba(0, 255, 247, 0.2);
         }
 
         /* Footer */
@@ -83,25 +69,24 @@
 
 <header>
     <h1>Mandala Graphs Showcase</h1>
-    <p>Scroll to explore interactive mandalas for different industries.</p>
+    <p>Explore different industries through interactive mandalas.</p>
 </header>
 
-<div class="carousel-container">
-    <!-- Mandala 1 -->
-    <div class="carousel-item">
-        <iframe 
-            src="https://tadhgkelleher.github.io/library/" 
-            title="Library Mandala">
-        </iframe>
-    </div>
-    <!-- Mandala 2 -->
-    <div class="carousel-item">
-        <iframe 
-            src="https://tadhgkelleher.github.io/Justin-Mandala/" 
-            title="Justin's Mandala">
-        </iframe>
-    </div>
-</div>
+<main class="mandala-container">
+    <h2>Library Mandala</h2>
+    <iframe 
+        class="mandala-iframe" 
+        src="https://tadhgkelleher.github.io/library/" 
+        title="Library Mandala">
+    </iframe>
+
+    <h2>Justin's Mandala</h2>
+    <iframe 
+        class="mandala-iframe" 
+        src="https://tadhgkelleher.github.io/Justin-Mandala/" 
+        title="Justin's Mandala">
+    </iframe>
+</main>
 
 <footer>
     &copy; 2025 Mandala Graphs Showcase. All rights reserved.
