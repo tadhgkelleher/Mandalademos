@@ -1,1 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- Previous head content and styles remain the same -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connections Graph</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet">
+  <style>
+    #connections-graph-container {
+      position: relative;
+      background-color: black;
+      margin: 0 auto;
+      width: 100%;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
+    #connections-graph {
+      height: 700px;
+      width: 100%;
+      border: 1px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+       transform: translateY(-100px); /* Moves the graph up by 100px */
+    }
+
+    .toggle-physics-button {
+      background-color: #4a90e2;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      font-size: 18px;
+      margin: 0 auto;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 10px;
+      z-index: 9999;
+      transition: background-color 0.3s ease;
+    }
+
+    .toggle-physics-button:hover {
+      background-color: #357abd;
+    }
+
+    .toggle-physics-button:active {
+      transform: translateY(1px);
+    }
+  </style>
+</head>
+<body>
+
+<div id="connections-graph-container">
+  <button class="toggle-physics-button">Push Button</button>
+  <div id="connections-graph"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Previous data setup remains the same
+    const items = [
+      // ... (previous items array remains the same)
+      { id: 1, title: "Main Work", tags: ["RTE's Late Late Show", "Sony Music", "Warner Bros", "4AD", "Satanta Records", "Performing", "Recording", "Touring"] },
+      { id: 2, title: "Rod Stewart", tags: ["Drums"] },
+      { id: 3, title: "Paul Young", tags: ["Drums"] },
+      { id: 4, title: "Kirsty MacColl", tags: ["Artist"] },
+      { id: 5, title: "Katie Melua", tags: ["Artist"] },
+      { id: 6, title: "The 4 Of Us", tags: ["Drums"] },
+      { id: 7, title: "Gavin Friday", tags: ["Artist"] },
+      { id: 8, title: "Interference", tags: ["Drums"] },
+      { id: 9, title: "Grand Slam", tags: ["Drums"] },
+      { id: 10, title: "Mik Pyro", tags: ["Artist"] },
+      { id: 11, title: "The Dublin Blues Cartel", tags: ["Drums"] },
+      { id: 12, title: "The Golden Horde", tags: ["Drums"] },
+      { id: 13, title: "The Forget-Me-Nots", tags: ["Drums"] },
+      { id: 14, title: "Lir", tags: ["Drums"] },
+      { id: 15, title: "Mitch Easter", tags: ["Producer", "REM", "Suzanne Vega", "Wilco"] },
+      { id: 16, title: "Bungalow", tags: ["Drums"] },
+      { id: 17, title: "The Glee Club", tags: ["Drums"] },
+      { id: 18, title: "Mundy", tags: ["Artist"] },
+      { id: 19, title: "Glen Hansard", tags: ["Artist"] },
+      { id: 20, title: "Eamonn Dowd", tags: ["Artist"] },
+      { id: 21, title: "The Racketeers", tags: ["Drums"] },
+      { id: 22, title: "Darling Sugar Honey", tags: ["Drums"] },
+      { id: 23, title: "Hank Half Head", tags: ["Drums"] },
+      { id: 24, title: "Alice Springs", tags: ["Drums"] },
+      { id: 25, title: "Tryst", tags: ["Artist"] },
+      { id: 26, title: "Donal Byrne", tags: ["Artist"] },
+      { id: 27, title: "John Murphy", tags: ["Artist"] },
+      { id: 28, title: "Hugh Doolin", tags: ["Artist"] },
+      { id: 29, title: "Sean O'Connor", tags: ["Artist"] },
+      { id: 30, title: "Pat Farrell", tags: ["Artist"] },
+      { id: 31, title: "John Quearney", tags: ["Artist"] },
+      { id: 32, title: "Thomas Walsh", tags: ["Artist", "Ivo Novello Winner"] },
+      { id: 33, title: "Robbie Malone", tags: ["Artist", "David Gray"] },
+      { id: 34, title: "Pete Wingfield", tags: ["Producer", "Paul McCartney", "Everly Bros", "Van Morrison"] },
+      { id: 35, title: "Pete Smith", tags: ["Producer", "Sting", "The Police", "Duran Duran"] },
+      { id: 36, title: "Paul Thomas", tags: ["Producer", "U2", "Phil Lynott", "Clannad"] },
+      { id: 37, title: "Chris O'Brien", tags: ["Producer", "The Waterboys", "Westlife", "Grammy-nominated"] },
+      { id: 38, title: "Andrew Philpot", tags: ["Producer", "U2", "Depeche Mode"] },
+      { id: 39, title: "Magnus Hoover", tags: ["Producer", "BoX", "Then Jerico"] },
+      { id: 40, title: "Sony Publishing", tags: ["Label"] }
+    ];
+
+    const nodes = new vis.DataSet([]);
+    const edges = new vis.DataSet([]);
+    const nodeConnections = {};
+
+    const groups = {
+      item: {
+        color: { background: '#4a90e2', border: '#357abd' }
+      },
+      tag: {
+        color: { background: '#e24a4a', border: '#bd3535' }
+      }
+    };
+
+    items.forEach(item => {
+      const itemNode = {
+        id: item.id,
+        label: item.title,
+        title: `<h3>${item.title}</h3><ul>${item.tags.map(tag => `<li>${tag}</li>`).join('')}</ul>`,
+        group: "item",
+        size: item.tags.length * 2,
+        font: { color: '#ffffff' }
+      };
+      nodes.add(itemNode);
+
+      item.tags.forEach(tag => {
+        const tagNode = nodes.get(tag);
+        if (!tagNode) {
+          nodes.add({ 
+            id: tag, 
+            label: tag, 
+            group: "tag",
+            font: { color: '#ffffff' }
+          });
+        }
+        edges.add({ 
+          from: item.id, 
+          to: tag,
+          color: { color: '#666666', highlight: '#999999' }
+        });
+
+        nodeConnections[tag] = (nodeConnections[tag] || 0) + 1;
+        nodeConnections[item.id] = (nodeConnections[item.id] || 0) + 1;
+      });
+    });
+
+    nodes.forEach(node => {
+      const connectionCount = nodeConnections[node.id] || 0;
+      node.size = Math.max(8, connectionCount * 2);
+      nodes.update(node);
+    });
+
+    const container = document.getElementById("connections-graph");
+    const data = { nodes: nodes, edges: edges };
+
+    const options = {
+      nodes: {
+        shape: 'dot',
+        font: { size: 14 },
+        scaling: {
+          min: 8,
+          max: 12
+        }
+      },
+      edges: {
+        width: 1,
+        smooth: {
+          type: 'continuous'
+        }
+      },
+      physics: {
+        enabled: false,
+        solver: 'forceAtlas2Based',
+        forceAtlas2Based: {
+          gravitationalConstant: -50,
+          centralGravity: 0.01,
+          springLength: 100,
+          springConstant: 0.08
+        },
+        stabilization: {
+          iterations: 100
+        }
+      },
+      interaction: {
+        hover: true,
+        zoomView: true,
+        dragView: true,
+        dragNodes: true,
+        zoomSpeed: 0.5,
+        tooltipDelay: 300
+      },
+      groups: groups,
+      layout: {
+        randomSeed: 2,
+        improvedLayout: true
+      }
+    };
+
+    const network = new vis.Network(container, data, options);
+
+    function applyCircularLayout() {
+      const positions = {};
+      const nodeCount = nodes.length;
+      const radius = 300;
+      const angle = (2 * Math.PI) / nodeCount;
+        const yOffset = -100; // Add an offset to raise the mandala
+      
+      let i = 0;
+      nodes.forEach((node) => {
+        positions[node.id] = {
+          x: radius * Math.cos(angle * i),
+          y: radius * Math.sin(angle * i)
+        };
+        i++;
+      });
+      
+      network.setOptions({ physics: { enabled: false } });
+      network.moveTo({ scale: 0.3 });
+      network.body.data.nodes.update(
+        nodes.map(node => ({
+          id: node.id,
+          x: positions[node.id].x,
+          y: positions[node.id].y
+        }))
+      );
+    }
+
+    network.moveTo({
+      position: { x: 0, y: 0 },
+      scale: 0.3,
+      animation: {
+        duration: 1000,
+        easingFunction: 'easeInOutQuad'
+      }
+    });
+
+    // Initial layout
+    applyCircularLayout();
+
+    const toggleButton = document.querySelector(".toggle-physics-button");
+    let isPhysicsEnabled = false;
+
+    toggleButton.addEventListener("click", function() {
+      isPhysicsEnabled = !isPhysicsEnabled;
+      if (isPhysicsEnabled) {
+        network.setOptions({ physics: { enabled: true } });
+      } else {
+        applyCircularLayout();
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
