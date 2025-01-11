@@ -1,1 +1,250 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coffee Shop Supply Chain Graph</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      color: #333;
+    }
+
+    #connections-graph-container {
+      position: relative;
+      background-color: #fafafa;
+      margin: 0 auto;
+      width: 100%;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+
+    #connections-graph {
+      height: 700px;
+      width: 100%;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      overflow: hidden;
+       margin-top: -200px; /* Raises the graph by 100px */
+}
+    
+
+    .toggle-physics-button {
+      background-color: #6f4f37;  /* Coffee brown color */
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      font-size: 18px;
+      margin: 0 auto;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 10px;
+      z-index: 9999;
+      transition: background-color 0.3s ease;
+    }
+
+    .toggle-physics-button:hover {
+      background-color: #5a3c28;  /* Darker brown */
+    }
+
+    .toggle-physics-button:active {
+      transform: translateY(1px);
+    }
+
+    .vis-network .vis-label {
+      color: black !important;
+    }
+  </style>
+</head>
+<body>
+
+<div id="connections-graph-container">
+  <button class="toggle-physics-button">Push Button</button>
+  <div id="connections-graph"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const items = [
+      { id: 1, title: "Raw Material Supplier", tags: ["Raw Materials", "Supplier"] },
+      { id: 2, title: "Component Manufacturer", tags: ["Manufacturing", "Supplier"] },
+      { id: 3, title: "Assembly Plant", tags: ["Assembly", "Manufacturer"] },
+      { id: 4, title: "Warehousing Facility", tags: ["Warehousing", "Logistics"] },
+      { id: 5, title: "Distributor", tags: ["Distribution", "Logistics"] },
+      { id: 6, title: "Retailer", tags: ["Retail", "Customer"] },
+      { id: 7, title: "Logistics Service Provider", tags: ["Logistics", "Transport"] },
+      { id: 8, title: "Raw Material Supplier 2", tags: ["Raw Materials", "Supplier"] },
+      { id: 9, title: "Packaging Supplier", tags: ["Packaging", "Supplier"] },
+      { id: 10, title: "Supplier 3", tags: ["Supplier", "Logistics"] },
+      { id: 11, title: "Customer", tags: ["Customer", "End User"] },
+      { id: 12, title: "Supplier 4", tags: ["Raw Materials", "Supplier"] },
+      { id: 13, title: "Manufacturer", tags: ["Manufacturing", "Manufacturer"] },
+      { id: 14, title: "Supply Chain Manager", tags: ["Logistics", "Management"] },
+      { id: 15, title: "Logistics Coordinator", tags: ["Logistics", "Management"] }
+    ];
+
+    const nodes = new vis.DataSet([]);
+    const edges = new vis.DataSet([]);
+    const nodeConnections = {};
+
+    const groups = {
+      item: {
+        color: { background: '#d29565', border: '#ac734f' }  /* Coffee beige and brown */
+      },
+      tag: {
+        color: { background: '#6e4f37', border: '#5a3c28' }  /* Dark coffee brown */
+      }
+    };
+
+    items.forEach(item => {
+      const itemNode = {
+        id: item.id,
+        label: item.title,
+        title: `<h3>${item.title}</h3><ul>${item.tags.map(tag => `<li>${tag}</li>`).join('')}</ul>`,
+        group: "item",
+        size: item.tags.length * 2,
+        font: { color: 'black' }
+      };
+      nodes.add(itemNode);
+
+      item.tags.forEach(tag => {
+        const tagNode = nodes.get(tag);
+        if (!tagNode) {
+          nodes.add({ 
+            id: tag, 
+            label: tag, 
+            group: "tag",
+            font: { color: 'black' }
+          });
+        }
+        edges.add({ 
+          from: item.id, 
+          to: tag,
+          color: { color: '#666666', highlight: '#999999' }
+        });
+
+        nodeConnections[tag] = (nodeConnections[tag] || 0) + 1;
+        nodeConnections[item.id] = (nodeConnections[item.id] || 0) + 1;
+      });
+    });
+
+    nodes.forEach(node => {
+      const connectionCount = nodeConnections[node.id] || 0;
+      node.size = Math.max(8, connectionCount * 2);
+      nodes.update(node);
+    });
+
+    const container = document.getElementById("connections-graph");
+    const data = { nodes: nodes, edges: edges };
+
+    const options = {
+      nodes: {
+        shape: 'dot',
+        font: { size: 14 },
+        scaling: {
+          min: 8,
+          max: 12
+        }
+      },
+      edges: {
+        width: 1,
+        smooth: {
+          type: 'continuous'
+        }
+      },
+      physics: {
+        enabled: false,
+        solver: 'forceAtlas2Based',
+        forceAtlas2Based: {
+          gravitationalConstant: -50,
+          centralGravity: 0.01,
+          springLength: 100,
+          springConstant: 0.08
+        },
+        stabilization: {
+          iterations: 100
+        }
+      },
+      interaction: {
+        hover: true,
+        zoomView: true,
+        dragView: true,
+        dragNodes: true,
+        zoomSpeed: 0.5,
+        tooltipDelay: 300
+      },
+      groups: groups,
+      layout: {
+        randomSeed: 2,
+        improvedLayout: true
+      }
+    };
+
+    const network = new vis.Network(container, data, options);
+
+    function applyCircularLayout() {
+      const positions = {};
+      const nodeCount = nodes.length;
+      const radius = 300;
+      const angle = (2 * Math.PI) / nodeCount;
+        const yOffset = -100; // Add an offset to raise the mandala
+      
+      let i = 0;
+      nodes.forEach((node) => {
+        positions[node.id] = {
+          x: radius * Math.cos(angle * i),
+          y: radius * Math.sin(angle * i)
+        };
+        i++;
+      });
+      
+      network.setOptions({ physics: { enabled: false } });
+      network.moveTo({ scale: 0.3 });
+      network.body.data.nodes.update(
+        nodes.map(node => ({
+          id: node.id,
+          x: positions[node.id].x,
+          y: positions[node.id].y
+        }))
+      );
+    }
+
+    network.moveTo({
+      position: { x: 0, y: 0 },
+      scale: 0.3,
+      animation: {
+        duration: 1000,
+        easingFunction: 'easeInOutQuad'
+      }
+    });
+
+    // Initial layout
+    applyCircularLayout();
+
+    const toggleButton = document.querySelector(".toggle-physics-button");
+    let isPhysicsEnabled = false;
+
+    toggleButton.addEventListener("click", function() {
+      isPhysicsEnabled = !isPhysicsEnabled;
+      if (isPhysicsEnabled) {
+        network.setOptions({ physics: { enabled: true } });
+      } else {
+        applyCircularLayout();
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
