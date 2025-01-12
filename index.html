@@ -35,37 +35,42 @@
             color: #aaa;
         }
 
-        /* Content Section */
-        .mandala-container {
+        /* Carousel Container */
+        .carousel {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 40px auto;
-            max-width: 900px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+            gap: 20px;
+            padding: 40px 20px;
         }
 
-        .mandala-wrapper {
-            display: flex;
-            justify-content: space-between;
-            margin: 20px 0;
-            width: 100%;
-            max-width: 800px;
-            flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+        .carousel::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for better UX */
         }
 
-        .mandala-image {
-            width: 45%;
-            height: 500px;
-            background-size: cover;
-            background-position: center;
-            box-shadow: 0px 4px 15px rgba(0, 255, 247, 0.2);
+        .mandala-item {
+            scroll-snap-align: start;
+            flex: 0 0 80%;
+            max-width: 700px;
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 255, 247, 0.2);
+            text-align: center;
+        }
+
+        .mandala-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: #00fff7;
         }
 
         .mandala-iframe {
-            width: 45%;
-            height: 500px;
+            width: 100%;
+            height: 400px;
             border: none;
-            box-shadow: 0px 4px 15px rgba(0, 255, 247, 0.2);
+            border-radius: 10px;
         }
 
         /* Footer */
@@ -84,14 +89,12 @@
                 font-size: 2rem;
             }
 
-            .mandala-wrapper {
-                flex-direction: column;
-                align-items: center; /* Center the content */
+            .mandala-item {
+                flex: 0 0 90%;
             }
 
-            .mandala-image, .mandala-iframe {
-                width: 100%;
-                height: 500px; /* Allow the height to adjust according to the content */
+            .mandala-iframe {
+                height: 300px;
             }
         }
     </style>
@@ -103,49 +106,25 @@
     <p>Explore different industries through interactive mandalas.</p>
 </header>
 
-<main class="mandala-container">
-    <h2>Library Mandala</h2>
-    <div class="mandala-wrapper">
-        <div 
-            class="mandala-image" 
-            style="background-image: url('https://miro.medium.com/v2/resize:fit:1200/1*6Jp3vJWe7VFlFHZ9WhSJng.jpeg');">
-        </div>
+<main class="carousel">
+    <div class="mandala-item">
+        <h2 class="mandala-title">Library Mandala</h2>
         <iframe class="mandala-iframe" src="library.html" title="Library Mandala"></iframe>
     </div>
-
-    <h2>Justin's Mandala</h2>
-    <div class="mandala-wrapper">
-        <div 
-            class="mandala-image" 
-            style="background-image: url('https://www.mdltone.audio/wp-content/themes/mdltone/img/mdl-tone-ultimate-heavy-drum-kit-blend.jpg');">
-        </div>
+    <div class="mandala-item">
+        <h2 class="mandala-title">Justin's Mandala</h2>
         <iframe class="mandala-iframe" src="justin.html" title="Justin's Mandala"></iframe>
     </div>
-
-    <h2>Sports Mandala</h2>
-    <div class="mandala-wrapper">
-        <div 
-            class="mandala-image" 
-            style="background-image: url('https://img.rasset.ie/0021a8cf-600.jpg');">
-        </div>
+    <div class="mandala-item">
+        <h2 class="mandala-title">Sports Mandala</h2>
         <iframe class="mandala-iframe" src="sports.html" title="Sports Mandala"></iframe>
     </div>
-
-    <h2>Fairtrade Mandala</h2>
-    <div class="mandala-wrapper">
-        <div 
-            class="mandala-image" 
-            style="background-image: url('https://www.spectrumhealth.ie/wp-content/uploads/2017/11/steamingcupofcoffeewithspiltcoffeebeans.jpg');">
-        </div>
+    <div class="mandala-item">
+        <h2 class="mandala-title">Fairtrade Mandala</h2>
         <iframe class="mandala-iframe" src="fairtrade.html" title="Fairtrade Mandala"></iframe>
     </div>
-
-    <h2>Medical Mandala</h2>
-    <div class="mandala-wrapper">
-        <div 
-            class="mandala-image" 
-            style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZbRGgX2pvCjSFmZ0f5meS2yZSyZDE79KS2w&s');">
-        </div>
+    <div class="mandala-item">
+        <h2 class="mandala-title">Medical Mandala</h2>
         <iframe class="mandala-iframe" src="medical.html" title="Medical Mandala"></iframe>
     </div>
 </main>
@@ -153,6 +132,10 @@
 <footer>
     &copy; 2025 Mandala Graphs Showcase. All rights reserved.
 </footer>
+
+<script>
+    // Optional: Add arrow buttons for navigation
+</script>
 
 </body>
 </html>
