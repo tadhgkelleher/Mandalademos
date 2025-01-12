@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mandala QR Code Graphs Showcase</title>
+    <title>Mandala Graphs Showcase</title>
     <style>
         /* General Reset */
         body, html {
@@ -12,18 +12,14 @@
             font-family: 'Arial', sans-serif;
             background: #1a1a1a;
             color: #f1f1f1;
-            overflow-x: hidden;
         }
-
+        
         /* Header */
         header {
             text-align: center;
             padding: 20px;
             background: #111;
             border-bottom: 2px solid #444;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
         }
 
         header h1 {
@@ -39,53 +35,36 @@
             color: #aaa;
         }
 
-        /* Scrolling Container */
-        .scroll-container {
+        /* Content Section */
+        .mandala-container {
             display: flex;
-            flex-direction: row;
-            align-items: flex-start;
-            overflow-x: auto;
-            white-space: nowrap;
-            scroll-behavior: smooth;
-            padding: 20px 0;
+            flex-direction: column;
+            align-items: center;
+            margin: 40px auto;
+            max-width: 900px;
         }
 
-        /* Each Mandala Section */
-        .mandala-section {
-            display: inline-block;
-            width: 80vw;
+        .mandala-wrapper {
+            display: flex;
+            justify-content: space-between;
+            margin: 20px 0;
+            width: 100%;
             max-width: 800px;
-            margin: 0 20px;
-            text-align: center;
-        }
-
-        .mandala-title {
-            font-size: 1.8rem;
-            margin: 10px 0;
-            color: #00fff7;
-        }
-
-        .mandala-description {
-            font-size: 1rem;
-            color: #ccc;
-            margin-bottom: 20px;
+            flex-wrap: wrap; /* Allow items to wrap on smaller screens */
         }
 
         .mandala-image {
-            width: 100%;
-            height: 400px;
+            width: 45%;
+            height: 500px;
             background-size: cover;
             background-position: center;
-            border-radius: 10px;
             box-shadow: 0px 4px 15px rgba(0, 255, 247, 0.2);
-            margin-bottom: 10px;
         }
 
-        iframe {
-            width: 100%;
-            height: 400px;
+        .mandala-iframe {
+            width: 45%;
+            height: 500px;
             border: none;
-            border-radius: 10px;
             box-shadow: 0px 4px 15px rgba(0, 255, 247, 0.2);
         }
 
@@ -99,67 +78,80 @@
             font-size: 0.9rem;
         }
 
-        /* Scrollbar Styling */
-        .scroll-container::-webkit-scrollbar {
-            height: 10px;
-        }
+        /* Media Query for Mobile Devices */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2rem;
+            }
 
-        .scroll-container::-webkit-scrollbar-thumb {
-            background-color: #444;
-            border-radius: 10px;
-        }
+            .mandala-wrapper {
+                flex-direction: column;
+                align-items: center; /* Center the content */
+            }
 
-        .scroll-container::-webkit-scrollbar-track {
-            background-color: #222;
+            .mandala-image, .mandala-iframe {
+                width: 100%;
+                height: 500px; /* Allow the height to adjust according to the content */
+            }
         }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>Mandala QR Code Graphs Showcase</h1>
-    <p>Swipe or scroll horizontally to explore unique visualizations.</p>
+    <h1>Mandala Graphs Showcase</h1>
+    <p>Explore different industries through interactive mandalas.</p>
 </header>
 
-<div class="scroll-container">
-    <div class="mandala-section">
-        <h2 class="mandala-title">Library Mandala</h2>
-        <p class="mandala-description">Explore the rich network of knowledge within the library ecosystem.</p>
-        <div class="mandala-image" style="background-image: url('https://miro.medium.com/v2/resize:fit:1200/1*6Jp3vJWe7VFlFHZ9WhSJng.jpeg');"></div>
-        <iframe src="library.html" title="Library Mandala"></iframe>
+<main class="mandala-container">
+    <h2>Library Mandala</h2>
+    <div class="mandala-wrapper">
+        <div 
+            class="mandala-image" 
+            style="background-image: url('https://miro.medium.com/v2/resize:fit:1200/1*6Jp3vJWe7VFlFHZ9WhSJng.jpeg');">
+        </div>
+        <iframe class="mandala-iframe" src="library.html" title="Library Mandala"></iframe>
     </div>
 
-    <div class="mandala-section">
-        <h2 class="mandala-title">Justin's Mandala</h2>
-        <p class="mandala-description">Dive into the world of music production with Justin’s Mandala.</p>
-        <div class="mandala-image" style="background-image: url('https://www.mdltone.audio/wp-content/themes/mdltone/img/mdl-tone-ultimate-heavy-drum-kit-blend.jpg');"></div>
-        <iframe src="justin.html" title="Justin's Mandala"></iframe>
+    <h2>Justin's Mandala</h2>
+    <div class="mandala-wrapper">
+        <div 
+            class="mandala-image" 
+            style="background-image: url('https://www.mdltone.audio/wp-content/themes/mdltone/img/mdl-tone-ultimate-heavy-drum-kit-blend.jpg');">
+        </div>
+        <iframe class="mandala-iframe" src="justin.html" title="Justin's Mandala"></iframe>
     </div>
 
-    <div class="mandala-section">
-        <h2 class="mandala-title">Sports Mandala</h2>
-        <p class="mandala-description">Uncover the exciting world of sports and team rivalries.</p>
-        <div class="mandala-image" style="background-image: url('https://img.rasset.ie/0021a8cf-600.jpg');"></div>
-        <iframe src="sports.html" title="Sports Mandala"></iframe>
+    <h2>Sports Mandala</h2>
+    <div class="mandala-wrapper">
+        <div 
+            class="mandala-image" 
+            style="background-image: url('https://img.rasset.ie/0021a8cf-600.jpg');">
+        </div>
+        <iframe class="mandala-iframe" src="sports.html" title="Sports Mandala"></iframe>
     </div>
 
-    <div class="mandala-section">
-        <h2 class="mandala-title">Fairtrade Mandala</h2>
-        <p class="mandala-description">Discover the journey of Fairtrade products and ethical choices.</p>
-        <div class="mandala-image" style="background-image: url('https://www.spectrumhealth.ie/wp-content/uploads/2017/11/steamingcupofcoffeewithspiltcoffeebeans.jpg');"></div>
-        <iframe src="fairtrade.html" title="Fairtrade Mandala"></iframe>
+    <h2>Fairtrade Mandala</h2>
+    <div class="mandala-wrapper">
+        <div 
+            class="mandala-image" 
+            style="background-image: url('https://www.spectrumhealth.ie/wp-content/uploads/2017/11/steamingcupofcoffeewithspiltcoffeebeans.jpg');">
+        </div>
+        <iframe class="mandala-iframe" src="fairtrade.html" title="Fairtrade Mandala"></iframe>
     </div>
 
-    <div class="mandala-section">
-        <h2 class="mandala-title">Medical Mandala</h2>
-        <p class="mandala-description">Visualize the complex network of healthcare systems and patient journeys.</p>
-        <div class="mandala-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZbRGgX2pvCjSFmZ0f5meS2yZSyZDE79KS2w&s');"></div>
-        <iframe src="medical.html" title="Medical Mandala"></iframe>
+    <h2>Medical Mandala</h2>
+    <div class="mandala-wrapper">
+        <div 
+            class="mandala-image" 
+            style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZbRGgX2pvCjSFmZ0f5meS2yZSyZDE79KS2w&s');">
+        </div>
+        <iframe class="mandala-iframe" src="medical.html" title="Medical Mandala"></iframe>
     </div>
-</div>
+</main>
 
 <footer>
-    &copy; 2025 Mandala QR Code Graphs Showcase. All rights reserved.
+    &copy; 2025 Mandala Graphs Showcase. All rights reserved.
 </footer>
 
 </body>
