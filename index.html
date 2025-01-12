@@ -12,14 +12,18 @@
             font-family: 'Arial', sans-serif;
             background: #1a1a1a;
             color: #f1f1f1;
+            overflow-x: hidden;
         }
-        
+
         /* Header */
         header {
             text-align: center;
             padding: 20px;
             background: #111;
             border-bottom: 2px solid #444;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         header h1 {
@@ -35,56 +39,54 @@
             color: #aaa;
         }
 
-        /* Content Section */
-        .mandala-container {
+        /* Scrolling Container */
+        .scroll-container {
             display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin: 40px auto;
-            max-width: 900px;
+            flex-direction: row;
+            align-items: flex-start;
+            overflow-x: auto;
+            white-space: nowrap;
+            scroll-behavior: smooth;
+            padding: 20px 0;
         }
 
-        .mandala-wrapper {
-            display: flex;
-            justify-content: space-between;
-            margin: 20px 0;
-            width: 100%;
+        /* Each Mandala Section */
+        .mandala-section {
+            display: inline-block;
+            width: 80vw;
             max-width: 800px;
-            flex-wrap: wrap; /* Allow items to wrap on smaller screens */
-        }
-
-        .mandala-image {
-            width: 45%;
-            height: 500px;
-            background-size: cover;
-            background-position: center;
-            box-shadow: 0px 4px 15px rgba(0, 255, 247, 0.2);
-        }
-
-        .mandala-iframe {
-            width: 45%;
-            height: 500px;
-            border: none;
-            box-shadow: 0px 4px 15px rgba(0, 255, 247, 0.2);
-        }
-
-        .mandala-text {
-            width: 100%;
-            margin: 20px 0;
+            margin: 0 20px;
             text-align: center;
-            color: #ccc;
         }
 
-        .mandala-text h2 {
+        .mandala-title {
             font-size: 1.8rem;
-            margin-bottom: 10px;
+            margin: 10px 0;
             color: #00fff7;
         }
 
-        .mandala-text p {
+        .mandala-description {
             font-size: 1rem;
-            line-height: 1.5;
-            margin: 0 10px;
+            color: #ccc;
+            margin-bottom: 20px;
+        }
+
+        .mandala-image {
+            width: 100%;
+            height: 400px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 255, 247, 0.2);
+            margin-bottom: 10px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0px 4px 15px rgba(0, 255, 247, 0.2);
         }
 
         /* Footer */
@@ -97,21 +99,18 @@
             font-size: 0.9rem;
         }
 
-        /* Media Query for Mobile Devices */
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2rem;
-            }
+        /* Scrollbar Styling */
+        .scroll-container::-webkit-scrollbar {
+            height: 10px;
+        }
 
-            .mandala-wrapper {
-                flex-direction: column;
-                align-items: center;
-            }
+        .scroll-container::-webkit-scrollbar-thumb {
+            background-color: #444;
+            border-radius: 10px;
+        }
 
-            .mandala-image, .mandala-iframe {
-                width: 100%;
-                height: 500px;
-            }
+        .scroll-container::-webkit-scrollbar-track {
+            background-color: #222;
         }
     </style>
 </head>
@@ -119,80 +118,45 @@
 
 <header>
     <h1>Mandala QR Code Graphs Showcase</h1>
-    <p>Discover an innovative way to visualize relationships and insights across industries using QR code-based mandala graphs.</p>
+    <p>Swipe or scroll horizontally to explore unique visualizations.</p>
 </header>
 
-<main class="mandala-container">
-    <section>
-        <div class="mandala-text">
-            <h2>Library Mandala</h2>
-            <p>Explore the rich network of knowledge within the library ecosystem. This mandala visualizes the connections and relationships between different genres, authors, and key themes.</p>
-        </div>
-        <div class="mandala-wrapper">
-            <div 
-                class="mandala-image" 
-                style="background-image: url('https://miro.medium.com/v2/resize:fit:1200/1*6Jp3vJWe7VFlFHZ9WhSJng.jpeg');">
-            </div>
-            <iframe class="mandala-iframe" src="library.html" title="Library Mandala"></iframe>
-        </div>
-    </section>
+<div class="scroll-container">
+    <div class="mandala-section">
+        <h2 class="mandala-title">Library Mandala</h2>
+        <p class="mandala-description">Explore the rich network of knowledge within the library ecosystem.</p>
+        <div class="mandala-image" style="background-image: url('https://miro.medium.com/v2/resize:fit:1200/1*6Jp3vJWe7VFlFHZ9WhSJng.jpeg');"></div>
+        <iframe src="library.html" title="Library Mandala"></iframe>
+    </div>
 
-    <section>
-        <div class="mandala-text">
-            <h2>Justin's Mandala</h2>
-            <p>Dive into the world of music production with Justin’s Mandala. Here, you can uncover the intricate layers of sound, composition, and collaboration.</p>
-        </div>
-        <div class="mandala-wrapper">
-            <div 
-                class="mandala-image" 
-                style="background-image: url('https://www.mdltone.audio/wp-content/themes/mdltone/img/mdl-tone-ultimate-heavy-drum-kit-blend.jpg');">
-            </div>
-            <iframe class="mandala-iframe" src="justin.html" title="Justin's Mandala"></iframe>
-        </div>
-    </section>
+    <div class="mandala-section">
+        <h2 class="mandala-title">Justin's Mandala</h2>
+        <p class="mandala-description">Dive into the world of music production with Justin’s Mandala.</p>
+        <div class="mandala-image" style="background-image: url('https://www.mdltone.audio/wp-content/themes/mdltone/img/mdl-tone-ultimate-heavy-drum-kit-blend.jpg');"></div>
+        <iframe src="justin.html" title="Justin's Mandala"></iframe>
+    </div>
 
-    <section>
-        <div class="mandala-text">
-            <h2>Sports Mandala</h2>
-            <p>Uncover the exciting world of sports with this mandala. It maps out team rivalries, player connections, and the shared passion that fuels the game.</p>
-        </div>
-        <div class="mandala-wrapper">
-            <div 
-                class="mandala-image" 
-                style="background-image: url('https://img.rasset.ie/0021a8cf-600.jpg');">
-            </div>
-            <iframe class="mandala-iframe" src="sports.html" title="Sports Mandala"></iframe>
-        </div>
-    </section>
+    <div class="mandala-section">
+        <h2 class="mandala-title">Sports Mandala</h2>
+        <p class="mandala-description">Uncover the exciting world of sports and team rivalries.</p>
+        <div class="mandala-image" style="background-image: url('https://img.rasset.ie/0021a8cf-600.jpg');"></div>
+        <iframe src="sports.html" title="Sports Mandala"></iframe>
+    </div>
 
-    <section>
-        <div class="mandala-text">
-            <h2>Fairtrade Mandala</h2>
-            <p>Take a closer look at the journey of Fairtrade products. This mandala highlights the network of producers, consumers, and the impact of ethical choices.</p>
-        </div>
-        <div class="mandala-wrapper">
-            <div 
-                class="mandala-image" 
-                style="background-image: url('https://www.spectrumhealth.ie/wp-content/uploads/2017/11/steamingcupofcoffeewithspiltcoffeebeans.jpg');">
-            </div>
-            <iframe class="mandala-iframe" src="fairtrade.html" title="Fairtrade Mandala"></iframe>
-        </div>
-    </section>
+    <div class="mandala-section">
+        <h2 class="mandala-title">Fairtrade Mandala</h2>
+        <p class="mandala-description">Discover the journey of Fairtrade products and ethical choices.</p>
+        <div class="mandala-image" style="background-image: url('https://www.spectrumhealth.ie/wp-content/uploads/2017/11/steamingcupofcoffeewithspiltcoffeebeans.jpg');"></div>
+        <iframe src="fairtrade.html" title="Fairtrade Mandala"></iframe>
+    </div>
 
-    <section>
-        <div class="mandala-text">
-            <h2>Medical Mandala</h2>
-            <p>Visualize the complex network of healthcare systems, medical advancements, and patient journeys through the Medical Mandala.</p>
-        </div>
-        <div class="mandala-wrapper">
-            <div 
-                class="mandala-image" 
-                style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZbRGgX2pvCjSFmZ0f5meS2yZSyZDE79KS2w&s');">
-            </div>
-            <iframe class="mandala-iframe" src="medical.html" title="Medical Mandala"></iframe>
-        </div>
-    </section>
-</main>
+    <div class="mandala-section">
+        <h2 class="mandala-title">Medical Mandala</h2>
+        <p class="mandala-description">Visualize the complex network of healthcare systems and patient journeys.</p>
+        <div class="mandala-image" style="background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZbRGgX2pvCjSFmZ0f5meS2yZSyZDE79KS2w&s');"></div>
+        <iframe src="medical.html" title="Medical Mandala"></iframe>
+    </div>
+</div>
 
 <footer>
     &copy; 2025 Mandala QR Code Graphs Showcase. All rights reserved.
