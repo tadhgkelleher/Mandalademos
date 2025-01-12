@@ -35,42 +35,44 @@
             color: #aaa;
         }
 
-        /* Carousel Container */
-        .carousel {
-            display: flex;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            -webkit-overflow-scrolling: touch;
-            gap: 20px;
-            padding: 40px 20px;
-        }
-
-        .carousel::-webkit-scrollbar {
-            display: none; /* Hide scrollbar for better UX */
-        }
-
-        .mandala-item {
-            scroll-snap-align: start;
-            flex: 0 0 80%;
-            max-width: 700px;
-            background: #222;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 15px rgba(0, 255, 247, 0.2);
+        /* Main Content */
+        .mandala-container {
             text-align: center;
+            padding: 40px 20px;
         }
 
         .mandala-title {
             font-size: 1.5rem;
-            margin-bottom: 10px;
+            margin-bottom: 20px;
             color: #00fff7;
         }
 
         .mandala-iframe {
-            width: 100%;
-            height: 400px;
+            width: 80%;
+            height: 500px;
             border: none;
             border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 255, 247, 0.2);
+        }
+
+        .navigation-buttons {
+            margin-top: 20px;
+        }
+
+        .nav-button {
+            background: #00fff7;
+            color: #111;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: background 0.3s ease;
+        }
+
+        .nav-button:hover {
+            background: #00cccc;
         }
 
         /* Footer */
@@ -82,21 +84,6 @@
             color: #aaa;
             font-size: 0.9rem;
         }
-
-        /* Media Query for Mobile Devices */
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2rem;
-            }
-
-            .mandala-item {
-                flex: 0 0 90%;
-            }
-
-            .mandala-iframe {
-                height: 300px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -106,26 +93,13 @@
     <p>Explore different industries through interactive mandalas.</p>
 </header>
 
-<main class="carousel">
-    <div class="mandala-item">
-        <h2 class="mandala-title">Library Mandala</h2>
-        <iframe class="mandala-iframe" src="library.html" title="Library Mandala"></iframe>
-    </div>
-    <div class="mandala-item">
-        <h2 class="mandala-title">Justin's Mandala</h2>
-        <iframe class="mandala-iframe" src="justin.html" title="Justin's Mandala"></iframe>
-    </div>
-    <div class="mandala-item">
-        <h2 class="mandala-title">Sports Mandala</h2>
-        <iframe class="mandala-iframe" src="sports.html" title="Sports Mandala"></iframe>
-    </div>
-    <div class="mandala-item">
-        <h2 class="mandala-title">Fairtrade Mandala</h2>
-        <iframe class="mandala-iframe" src="fairtrade.html" title="Fairtrade Mandala"></iframe>
-    </div>
-    <div class="mandala-item">
-        <h2 class="mandala-title">Medical Mandala</h2>
-        <iframe class="mandala-iframe" src="medical.html" title="Medical Mandala"></iframe>
+<main class="mandala-container">
+    <h2 class="mandala-title" id="mandala-title">Library Mandala</h2>
+    <iframe class="mandala-iframe" id="mandala-iframe" src="library.html" title="Library Mandala"></iframe>
+
+    <div class="navigation-buttons">
+        <button class="nav-button" id="prev-button">Previous</button>
+        <button class="nav-button" id="next-button">Next</button>
     </div>
 </main>
 
@@ -134,7 +108,51 @@
 </footer>
 
 <script>
-    // Optional: Add arrow buttons for navigation
+    // Mandala data
+    const mandalas = [
+        { title: "Library Mandala", src: "library.html" },
+        { title: "Justin's Mandala", src: "justin.html" },
+        { title: "Sports Mandala", src: "sports.html" },
+        { title: "Fairtrade Mandala", src: "fairtrade.html" },
+        { title: "Medical Mandala", src: "medical.html" }
+    ];
+
+    let currentIndex = 0;
+
+    // DOM Elements
+    const titleElement = document.getElementById("mandala-title");
+    const iframeElement = document.getElementById("mandala-iframe");
+    const prevButton = document.getElementById("prev-button");
+    const nextButton = document.getElementById("next-button");
+
+    // Update content based on current index
+    function updateMandala() {
+        const mandala = mandalas[currentIndex];
+        titleElement.textContent = mandala.title;
+        iframeElement.src = mandala.src;
+
+        // Enable/disable buttons
+        prevButton.disabled = currentIndex === 0;
+        nextButton.disabled = currentIndex === mandalas.length - 1;
+    }
+
+    // Event Listeners
+    prevButton.addEventListener("click", () => {
+        if (currentIndex > 0) {
+            currentIndex--;
+            updateMandala();
+        }
+    });
+
+    nextButton.addEventListener("click", () => {
+        if (currentIndex < mandalas.length - 1) {
+            currentIndex++;
+            updateMandala();
+        }
+    });
+
+    // Initial load
+    updateMandala();
 </script>
 
 </body>
