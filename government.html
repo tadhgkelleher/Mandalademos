@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Government Network Visualization</title>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css" rel="stylesheet">
+  <style>
+    body {
+      background-color: #1a1a2e;
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+    }
+
+    #connections-graph-container {
+      position: relative;
+      background-color: #1a1a2e;
+      margin: 0 auto;
+      width: 100%;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #connections-graph {
+      height: 700px;
+      width: 100%;
+      border: 1px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-top: -200px;
+    }
+
+    .toggle-physics-button {
+      background-color: #2d4059;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 4px;
+      font-size: 18px;
+      margin: 0 auto;
+      cursor: pointer;
+      text-align: center;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      position: sticky;
+      top: 10px;
+      z-index: 9999;
+      transition: background-color 0.3s ease;
+    }
+
+    .toggle-physics-button:hover {
+      background-color: #3d5a80;
+    }
+
+    .toggle-physics-button:active {
+      transform: translateY(1px);
+    }
+  </style>
+</head>
+<body>
+
+<div id="connections-graph-container">
+  <button class="toggle-physics-button">Push Button</button>
+  <div id="connections-graph"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const items = [
+      // Departments
+      { id: 1, title: "Department of Treasury", type: "Department", tags: ["Economic Policy", "Taxation", "Budget", "Federal Reserve", "Fiscal Planning"] },
+      { id: 2, title: "Department of Defense", type: "Department", tags: ["Military", "National Security", "Veterans Affairs", "Defense Budget", "Military Strategy"] },
+      { id: 3, title: "Department of State", type: "Department", tags: ["Foreign Policy", "Diplomacy", "International Relations", "Diplomatic Corps"] },
+      { id: 4, title: "Department of Justice", type: "Department", tags: ["Law Enforcement", "Legal Affairs", "Civil Rights", "Legal Policy", "Legal Reform"] },
+      { id: 5, title: "Department of Education", type: "Department", tags: ["Education Policy", "Student Loans", "Academic Standards", "School Policy", "Education Reform"] },
+      
+      // Ministers/Officials
+      { id: 6, title: "Secretary of Treasury", type: "Minister", tags: ["Department of Treasury", "Economic Policy", "Federal Reserve"] },
+      { id: 7, title: "Secretary of Defense", type: "Minister", tags: ["Department of Defense", "Military Strategy", "Defense Budget"] },
+      { id: 8, title: "Secretary of State", type: "Minister", tags: ["Department of State", "Foreign Relations", "Diplomatic Corps"] },
+      { id: 9, title: "Attorney General", type: "Minister", tags: ["Department of Justice", "Law Enforcement", "Legal Policy"] },
+      { id: 10, title: "Secretary of Education", type: "Minister", tags: ["Department of Education", "Education Reform", "School Policy"] },
+
+      // Policies
+      { id: 11, title: "Federal Budget 2024", type: "Policy", tags: ["Department of Treasury", "Economic Policy", "Fiscal Planning"] },
+      { id: 12, title: "National Defense Strategy", type: "Policy", tags: ["Department of Defense", "Military", "Security"] },
+      { id: 13, title: "Diplomatic Relations Act", type: "Policy", tags: ["Department of State", "International Relations"] },
+      { id: 14, title: "Justice Reform Initiative", type: "Policy", tags: ["Department of Justice", "Legal Reform"] },
+      { id: 15, title: "Education Modernization Plan", type: "Policy", tags: ["Department of Education", "Academic Standards"] },
+
+      // Events
+      { id: 16, title: "Annual Budget Meeting", type: "Event", tags: ["Department of Treasury", "Federal Budget 2024"] },
+      { id: 17, title: "Defense Summit 2024", type: "Event", tags: ["Department of Defense", "National Defense Strategy"] },
+      { id: 18, title: "International Relations Forum", type: "Event", tags: ["Department of State", "Diplomatic Relations Act"] },
+      { id: 19, title: "Justice Reform Conference", type: "Event", tags: ["Department of Justice", "Justice Reform Initiative"] },
+      { id: 20, title: "Education Policy Summit", type: "Event", tags: ["Department of Education", "Education Modernization Plan"] }
+    ];
+
+    const nodes = new vis.DataSet([]);
+    const edges = new vis.DataSet([]);
+    const nodeConnections = {};
+
+    const groups = {
+      Department: {
+        color: { background: '#3d5a80', border: '#2b3d59' }
+      },
+      Minister: {
+        color: { background: '#98c1d9', border: '#7697ac' }
+      },
+      Policy: {
+        color: { background: '#e0fbfc', border: '#a3bfc0' }
+      },
+      Event: {
+        color: { background: '#ee6c4d', border: '#bc563d' }
+      }
+    };
+
+    // First pass: Create all nodes and count connections
+    items.forEach(item => {
+      nodeConnections[item.id] = 0;
+      item.tags.forEach(tag => {
+        if (!nodeConnections[tag]) {
+          nodeConnections[tag] = 0;
+        }
+        nodeConnections[tag]++;
+        nodeConnections[item.id]++;
+      });
+    });
+
+    // Second pass: Create nodes with correct sizes
+    items.forEach(item => {
+      const itemNode = {
+        id: item.id,
+        label: item.title,
+        title: `<h3>${item.title}</h3><ul>${item.tags.map(tag => `<li>${tag}</li>`).join('')}</ul>`,
+        group: item.type,
+        value: nodeConnections[item.id] * 5, // Use value instead of size for proportional scaling
+        font: { 
+          color: '#ffffff',
+          size: Math.min(14 + nodeConnections[item.id], 30) // Increase font size with connections, but cap it
+        }
+      };
+      nodes.add(itemNode);
+
+      item.tags.forEach(tag => {
+        if (!nodes.get(tag)) {
+          nodes.add({ 
+            id: tag, 
+            label: tag, 
+            group: "Policy",
+            value: nodeConnections[tag] * 5,
+            font: { 
+              color: '#ffffff',
+              size: Math.min(14 + nodeConnections[tag], 30)
+            }
+          });
+        }
+        edges.add({ 
+          from: item.id, 
+          to: tag,
+          color: { color: '#666666', highlight: '#999999' }
+        });
+      });
+    });
+
+    const container = document.getElementById("connections-graph");
+    const data = { nodes: nodes, edges: edges };
+
+    const options = {
+      nodes: {
+        shape: 'dot',
+        scaling: {
+          min: 20,
+          max: 80,
+          label: {
+            enabled: true,
+            min: 14,
+            max: 30
+          }
+        }
+      },
+      edges: {
+        width: 1,
+        smooth: {
+          type: 'continuous'
+        }
+      },
+      physics: {
+        enabled: false,
+        solver: 'forceAtlas2Based',
+        forceAtlas2Based: {
+          gravitationalConstant: -50,
+          centralGravity: 0.001,
+          springLength: 200,
+          springConstant: 0.08
+        },
+        stabilization: {
+          iterations: 100
+        }
+      },
+      interaction: {
+        hover: true,
+        zoomView: true,
+        dragView: true,
+        dragNodes: true,
+        zoomSpeed: 0.5,
+        tooltipDelay: 300
+      },
+      groups: groups,
+      layout: {
+        randomSeed: 2,
+        improvedLayout: true
+      }
+    };
+
+    const network = new vis.Network(container, data, options);
+
+    function applyCircularLayout() {
+      const positions = {};
+      const nodeCount = nodes.length;
+      const radius = 350;
+      const angle = (2 * Math.PI) / nodeCount;
+      const yOffset = -200;
+      
+      let i = 0;
+      nodes.forEach((node) => {
+        positions[node.id] = {
+          x: radius * Math.cos(angle * i),
+          y: radius * Math.sin(angle * i)
+        };
+        i++;
+      });
+      
+      network.setOptions({ physics: { enabled: false } });
+      network.moveTo({ scale: 0.3 });
+      network.body.data.nodes.update(
+        nodes.map(node => ({
+          id: node.id,
+          x: positions[node.id].x,
+          y: positions[node.id].y
+        }))
+      );
+    }
+
+    network.moveTo({
+      position: { x: 0, y: 0 },
+      scale: 0.3,
+      animation: {
+        duration: 1000,
+        easingFunction: 'easeInOutQuad'
+      }
+    });
+
+    applyCircularLayout();
+
+    const toggleButton = document.querySelector(".toggle-physics-button");
+    let isPhysicsEnabled = false;
+
+    toggleButton.addEventListener("click", function() {
+      isPhysicsEnabled = !isPhysicsEnabled;
+      if (isPhysicsEnabled) {
+        network.setOptions({ physics: { enabled: true } });
+      } else {
+        applyCircularLayout();
+        network.setOptions({ physics: { enabled: false } });
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
