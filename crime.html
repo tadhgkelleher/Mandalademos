@@ -8,18 +8,14 @@
   <style>
     body {
       background-color: #1e1e2f;
-      color: #fff;
+      color: white;
       font-family: 'Arial', sans-serif;
     }
 
     #connections-graph-container {
-      background-color: #1e1e2f;
-      margin: 0 auto;
       width: 100%;
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      margin: 0 auto;
+      padding: 20px;
     }
 
     #connections-graph {
@@ -28,99 +24,87 @@
       border: 1px solid #333;
       border-radius: 8px;
     }
-
-    .toggle-physics-button {
-      background-color: #4a90e2;
-      color: white;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 4px;
-      font-size: 16px;
-      margin-bottom: 10px;
-      cursor: pointer;
-    }
-
-    .toggle-physics-button:hover {
-      background-color: #357abd;
-    }
   </style>
 </head>
 <body>
 
 <div id="connections-graph-container">
-  <button class="toggle-physics-button">Toggle Physics</button>
   <div id="connections-graph"></div>
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const items = [
-      { id: 1, title: "John Doe", type: "Suspect", tags: ["Armed Robbery", "The Black Vipers", "Los Angeles", "Weapon Found"] },
-      { id: 2, title: "Jane Smith", type: "Suspect", tags: ["Fraud", "The Golden Hawks", "New York", "Fake IDs"] },
-      { id: 3, title: "Armed Robbery", type: "Crime", tags: ["Los Angeles", "Weapon Found"] },
-      { id: 4, title: "The Black Vipers", type: "Gang", tags: ["Los Angeles", "Armed Robbery", "Drug Trafficking"] },
-      { id: 5, title: "Drug Trafficking", type: "Crime", tags: ["The Black Vipers", "Miami", "Cash Seized"] },
-      { id: 6, title: "Fake IDs", type: "Evidence", tags: ["Jane Smith", "New York"] },
-      { id: 7, title: "The Golden Hawks", type: "Gang", tags: ["Fraud", "New York"] },
-      { id: 8, title: "Weapon Found", type: "Evidence", tags: ["Armed Robbery", "Los Angeles", "John Doe"] },
-      { id: 9, title: "Miami", type: "Location", tags: ["Drug Trafficking", "Cash Seized"] },
-      { id: 10, title: "Los Angeles", type: "Location", tags: ["John Doe", "Armed Robbery", "The Black Vipers"] },
-      { id: 11, title: "New York", type: "Location", tags: ["Fraud", "Jane Smith", "The Golden Hawks"] },
-      { id: 12, title: "Cash Seized", type: "Evidence", tags: ["Drug Trafficking", "Miami"] },
-    ];
+    const nodes = new vis.DataSet([
+      { id: 1, label: "John Doe", group: "Suspect" },
+      { id: 2, label: "Jane Smith", group: "Suspect" },
+      { id: 3, label: "Armed Robbery", group: "Crime" },
+      { id: 4, label: "The Black Vipers", group: "Gang" },
+      { id: 5, label: "Drug Trafficking", group: "Crime" },
+      { id: 6, label: "Fake IDs", group: "Evidence" },
+      { id: 7, label: "The Golden Hawks", group: "Gang" },
+      { id: 8, label: "Weapon Found", group: "Evidence" },
+      { id: 9, label: "Los Angeles", group: "Location" },
+      { id: 10, label: "New York", group: "Location" },
+      { id: 11, label: "Miami", group: "Location" },
+      { id: 12, label: "Cash Seized", group: "Evidence" }
+    ]);
 
-    const nodes = new vis.DataSet([]);
-    const edges = new vis.DataSet([]);
-    const groups = {
-      Suspect: { color: { background: '#ff6f61', border: '#c14438' } },
-      Crime: { color: { background: '#ffdf87', border: '#d4b142' } },
-      Gang: { color: { background: '#53a6c1', border: '#1f4e5b' } },
-      Evidence: { color: { background: '#c0c2ff', border: '#8f90ff' } },
-      Location: { color: { background: '#7f4b94', border: '#5a2d7b' } },
-    };
-
-    items.forEach(item => {
-      nodes.add({
-        id: item.id,
-        label: item.title,
-        group: item.type,
-        title: `<strong>${item.type}</strong>: ${item.title}`,
-        size: 10 + item.tags.length * 2,
-        font: { color: '#fff' }
-      });
-
-      item.tags.forEach(tag => {
-        const tagNode = nodes.get(tag);
-        if (!tagNode) {
-          nodes.add({ id: tag, label: tag, group: "Evidence", font: { color: '#fff' } });
-        }
-        edges.add({ from: item.id, to: tag, color: { color: '#666' } });
-      });
-    });
+    const edges = new vis.DataSet([
+      { from: 1, to: 3 }, // John Doe -> Armed Robbery
+      { from: 1, to: 8 }, // John Doe -> Weapon Found
+      { from: 1, to: 9 }, // John Doe -> Los Angeles
+      { from: 2, to: 6 }, // Jane Smith -> Fake IDs
+      { from: 2, to: 10 }, // Jane Smith -> New York
+      { from: 3, to: 4 }, // Armed Robbery -> The Black Vipers
+      { from: 3, to: 8 }, // Armed Robbery -> Weapon Found
+      { from: 4, to: 9 }, // The Black Vipers -> Los Angeles
+      { from: 5, to: 4 }, // Drug Trafficking -> The Black Vipers
+      { from: 5, to: 11 }, // Drug Trafficking -> Miami
+      { from: 5, to: 12 }, // Drug Trafficking -> Cash Seized
+      { from: 6, to: 7 }, // Fake IDs -> The Golden Hawks
+      { from: 7, to: 10 }, // The Golden Hawks -> New York
+    ]);
 
     const container = document.getElementById("connections-graph");
     const data = { nodes: nodes, edges: edges };
 
     const options = {
-      nodes: { shape: 'dot', font: { size: 14 } },
-      edges: { width: 1, smooth: { type: 'continuous' } },
-      groups: groups,
-      physics: {
-        enabled: true,
-        solver: 'forceAtlas2Based',
-        forceAtlas2Based: { gravitationalConstant: -50, centralGravity: 0.001, springLength: 150, springConstant: 0.08 },
-        stabilization: { iterations: 100 }
+      layout: {
+        hierarchical: false,
+        improvedLayout: true,
+        randomSeed: 2,
+        clusterThreshold: 200,
       },
-      interaction: { hover: true, dragNodes: true, zoomView: true, tooltipDelay: 300 },
+      physics: {
+        enabled: false, // Ensure circular layout remains static
+      },
+      groups: {
+        Suspect: { color: { background: '#ff6f61', border: '#c14438' } },
+        Crime: { color: { background: '#ffdf87', border: '#d4b142' } },
+        Gang: { color: { background: '#53a6c1', border: '#1f4e5b' } },
+        Evidence: { color: { background: '#c0c2ff', border: '#8f90ff' } },
+        Location: { color: { background: '#7f4b94', border: '#5a2d7b' } },
+      },
+      nodes: {
+        shape: 'dot',
+        size: 25,
+        font: { size: 16, color: '#ffffff' },
+        borderWidth: 2,
+      },
+      edges: {
+        width: 2,
+        color: { color: '#848484', highlight: '#ff6f61' },
+        smooth: true,
+      },
+      interaction: {
+        dragNodes: true,
+        dragView: true,
+        zoomView: true,
+      },
     };
 
-    const network = new vis.Network(container, data, options);
-
-    document.querySelector(".toggle-physics-button").addEventListener("click", () => {
-      const physicsEnabled = network.getOptionsFromConfigurator().physics.enabled;
-      network.setOptions({ physics: { enabled: !physicsEnabled } });
-    });
+    new vis.Network(container, data, options);
   });
 </script>
 
