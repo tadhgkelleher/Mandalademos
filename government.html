@@ -70,11 +70,11 @@
   document.addEventListener("DOMContentLoaded", function () {
     const items = [
       // Departments
-      { id: 1, title: "Department of Treasury", type: "Department", tags: ["Economic Policy", "Taxation", "Budget", "Federal Reserve", "Fiscal Planning"] },
-      { id: 2, title: "Department of Defense", type: "Department", tags: ["Military", "National Security", "Veterans Affairs", "Defense Budget", "Military Strategy"] },
-      { id: 3, title: "Department of State", type: "Department", tags: ["Foreign Policy", "Diplomacy", "International Relations", "Diplomatic Corps"] },
-      { id: 4, title: "Department of Justice", type: "Department", tags: ["Law Enforcement", "Legal Affairs", "Civil Rights", "Legal Policy", "Legal Reform"] },
-      { id: 5, title: "Department of Education", type: "Department", tags: ["Education Policy", "Student Loans", "Academic Standards", "School Policy", "Education Reform"] },
+      { id: 1, title: "Department of Treasury", type: "Department", tags: ["Economic Policy", "Taxation", "Budget"] },
+      { id: 2, title: "Department of Defense", type: "Department", tags: ["Military", "National Security", "Veterans Affairs"] },
+      { id: 3, title: "Department of State", type: "Department", tags: ["Foreign Policy", "Diplomacy", "International Relations"] },
+      { id: 4, title: "Department of Justice", type: "Department", tags: ["Law Enforcement", "Legal Affairs", "Civil Rights"] },
+      { id: 5, title: "Department of Education", type: "Department", tags: ["Education Policy", "Student Loans", "Academic Standards"] },
       
       // Ministers/Officials
       { id: 6, title: "Secretary of Treasury", type: "Minister", tags: ["Department of Treasury", "Economic Policy", "Federal Reserve"] },
@@ -117,44 +117,25 @@
       }
     };
 
-    // First pass: Create all nodes and count connections
-    items.forEach(item => {
-      nodeConnections[item.id] = 0;
-      item.tags.forEach(tag => {
-        if (!nodeConnections[tag]) {
-          nodeConnections[tag] = 0;
-        }
-        nodeConnections[tag]++;
-        nodeConnections[item.id]++;
-      });
-    });
-
-    // Second pass: Create nodes with correct sizes
     items.forEach(item => {
       const itemNode = {
         id: item.id,
         label: item.title,
-        title: <h3>${item.title}</h3><ul>${item.tags.map(tag => <li>${tag}</li>).join('')}</ul>,
+        title: `<h3>${item.title}</h3><ul>${item.tags.map(tag => `<li>${tag}</li>`).join('')}</ul>`,
         group: item.type,
-        value: nodeConnections[item.id] * 5, // Use value instead of size for proportional scaling
-        font: { 
-          color: '#ffffff',
-          size: Math.min(14 + nodeConnections[item.id], 30) // Increase font size with connections, but cap it
-        }
+        size: item.tags.length * 6,
+        font: { color: '#ffffff' }
       };
       nodes.add(itemNode);
 
       item.tags.forEach(tag => {
-        if (!nodes.get(tag)) {
+        const tagNode = nodes.get(tag);
+        if (!tagNode) {
           nodes.add({ 
             id: tag, 
             label: tag, 
             group: "Policy",
-            value: nodeConnections[tag] * 5,
-            font: { 
-              color: '#ffffff',
-              size: Math.min(14 + nodeConnections[tag], 30)
-            }
+            font: { color: '#ffffff' }
           });
         }
         edges.add({ 
@@ -162,7 +143,16 @@
           to: tag,
           color: { color: '#666666', highlight: '#999999' }
         });
+
+        nodeConnections[tag] = (nodeConnections[tag] || 0) + 1;
+        nodeConnections[item.id] = (nodeConnections[item.id] || 0) + 1;
       });
+    });
+
+    nodes.forEach(node => {
+      const connectionCount = nodeConnections[node.id] || 0;
+      node.size = Math.max(10, connectionCount * 3);
+      nodes.update(node);
     });
 
     const container = document.getElementById("connections-graph");
@@ -171,14 +161,10 @@
     const options = {
       nodes: {
         shape: 'dot',
+        font: { size: 14 },
         scaling: {
-          min: 20,
-          max: 80,
-          label: {
-            enabled: true,
-            min: 14,
-            max: 30
-          }
+          min: 10,
+          max: 25
         }
       },
       edges: {
@@ -193,7 +179,7 @@
         forceAtlas2Based: {
           gravitationalConstant: -50,
           centralGravity: 0.001,
-          springLength: 200,
+          springLength: 150,
           springConstant: 0.08
         },
         stabilization: {
