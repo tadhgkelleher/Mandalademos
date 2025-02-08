@@ -13,7 +13,7 @@
             background: #1a1a1a;
             color: #f1f1f1;
         }
-        
+
         /* Header */
         header {
             text-align: center;
@@ -23,14 +23,14 @@
         }
 
         header h1 {
-            font-size: 2.5rem;
+            font-size: 2rem; /* Reduced font size for better mobile fit */
             margin: 0;
-            letter-spacing: 2px;
+            letter-spacing: 1px; /* Reduced letter spacing */
             color: #00fff7;
         }
 
         header p {
-            font-size: 1rem;
+            font-size: 0.9rem; /* Reduced font size */
             margin-top: 10px;
             color: #aaa;
         }
@@ -38,36 +38,39 @@
         /* Main Content */
         .mandala-container {
             text-align: center;
-            padding: 40px 20px;
+            padding: 20px; /* Reduced padding */
         }
 
         .mandala-title {
-            font-size: 1.5rem;
-            margin-bottom: 20px;
+            font-size: 1.3rem; /* Reduced font size */
+            margin-bottom: 15px; /* Reduced margin */
             color: #00fff7;
         }
 
         .mandala-iframe {
-            width: 80%;
-            height: 500px;
+            width: 100%; /* Take up full width */
+            max-width: 800px; /* Maximum width for larger screens */
+            height: 400px; /* Adjusted height */
             border: none;
             border-radius: 10px;
             box-shadow: 0 4px 15px rgba(0, 255, 247, 0.2);
         }
 
         .navigation-buttons {
-            margin-top: 20px;
+            margin-top: 15px; /* Reduced margin */
+            display: flex;
+            justify-content: center; /* Center buttons horizontally */
+            gap: 10px; /* Add some spacing between buttons */
         }
 
         .nav-button {
             background: #00fff7;
             color: #111;
             border: none;
-            padding: 10px 20px;
-            font-size: 1rem;
+            padding: 8px 16px; /* Reduced padding */
+            font-size: 0.9rem; /* Reduced font size */
             border-radius: 5px;
             cursor: pointer;
-            margin: 0 10px;
             transition: background 0.3s ease;
         }
 
@@ -82,7 +85,47 @@
             background: #111;
             border-top: 2px solid #444;
             color: #aaa;
-            font-size: 0.9rem;
+            font-size: 0.8rem; /* Reduced font size */
+        }
+
+        /* Media Query for larger screens */
+        @media (min-width: 768px) {
+            header h1 {
+                font-size: 2.5rem;
+                letter-spacing: 2px;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .mandala-container {
+                padding: 40px 20px;
+            }
+
+            .mandala-title {
+                font-size: 1.5rem;
+                margin-bottom: 20px;
+            }
+
+            .mandala-iframe {
+                width: 80%;
+                height: 500px;
+            }
+
+            .navigation-buttons {
+                margin-top: 20px;
+            }
+
+            .nav-button {
+                padding: 10px 20px;
+                font-size: 1rem;
+                margin: 0 10px;
+            }
+
+            footer {
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -104,20 +147,20 @@
 </main>
 
 <footer>
-    &copy; 2025 Mandala Graphs Showcase. All rights reserved.
+    © 2025 Mandala Graphs Showcase. All rights reserved.
 </footer>
 
 <script>
     // Mandala data
     const mandalas = [
-   
+
                 { title: "Government Mandala", src: "government.html" },
         { title: "Library Mandala", src: "library.html" },
         { title: "Justin's Mandala", src: "justin.html" },
         { title: "Sports Mandala", src: "sports.html" },
         { title: "Fairtrade Mandala", src: "fairtrade.html" },
         { title: "Medical Mandala", src: "medical.html" }
-        
+
     ];
 
     let currentIndex = 0;
